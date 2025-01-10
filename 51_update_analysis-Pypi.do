@@ -3,7 +3,7 @@
 // Pypi -- 1.6.0
 //
 // ============================================================================
-cd ~/Dropbox/Papers/10_WorkInProgress/SoftwareUpdates/Data/Pypi/
+cd ~/Downloads/Pypi-test/
 
 // PREPARE REPO IDs
 use repositories_Pypi.dta, clear
@@ -11,16 +11,16 @@ use repositories_Pypi.dta, clear
 save repoid_projectname_description.dta, replace
 
 // PREPARE NETWORK VARIABLES
-insheet using Master/degrees_repo_dependencies_Pypi-cuts.csv, delimiter(";") names clear
-save Master/degrees_repo_dependencies_Pypi-cuts.dta, replace
+insheet using degrees_repo_dependencies_Pypi-cuts.csv, delimiter(";") names clear
+save degrees_repo_dependencies_Pypi-cuts.dta, replace
 
 // CREATE COVARIATE DATASET
-insheet using Master/master_Pypi-cuts-lcc.csv, clear delimiter(";") names
+insheet using master_Pypi-cuts-lcc.csv, clear delimiter(";") names
 merge 1:1 repoid using repoid_projectname_description.dta
 	keep if _merge == 3
 	drop _merge
 
-merge 1:1 repoid using Master/degrees_repo_dependencies_Pypi-cuts.dta
+merge 1:1 repoid using degrees_repo_dependencies_Pypi-cuts.dta
 	keep if _merge == 3
 	drop _merge
 
@@ -34,6 +34,9 @@ merge 1:1 repoid using Master/degrees_repo_dependencies_Pypi-cuts.dta
 
 	sort repoid
 	order repoid projectname description
+	
+	gen update_rate = num_versions / maturity
+	// TODO 2025-01-10: THIS SHOULD BE ENOUGH TO COMPUTE c_i * lambda_i using 90_compute_equilibrium.py.
 save covariates_Pypi-cuts-lcc.dta, replace 
 
 // ANALYZE COVARIATES 
