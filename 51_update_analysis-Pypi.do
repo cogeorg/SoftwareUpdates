@@ -3,7 +3,7 @@
 // Pypi -- 1.6.0
 //
 // ============================================================================
-cd ~/Downloads/Pypi-test/
+cd ~/Downloads/Pypi/
 
 // PREPARE REPO IDs
 use repositories_Pypi.dta, clear
